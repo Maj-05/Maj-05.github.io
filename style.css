@@ -63,3 +63,36 @@ footer{justify-content:space-between;color:#b0bcaf;border-top:1px solid var(--li
 @media(max-width:920px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{gap:24px}.caption{padding:14px}.caption>span{display:none}}
 @media(max-width:680px){header{min-height:60px}.hero,.about,.grid{grid-template-columns:1fr}.hero{padding-block:36px;gap:24px}h1{font-size:clamp(2.15rem,8.5vw,3.4rem);line-height:1.2}h1 span{display:inline}.lead{margin:14px 0 17px}.scene{aspect-ratio:2.6}.caption>span{display:inline}.section-head{align-items:flex-start;flex-direction:column}.filters button{padding:8px 11px}.card{min-height:0;padding:18px}.card h3{margin-top:12px}.about h2 br{display:none}}
 @media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.feature:hover canvas{transform:none}}
+
+/* Archive terminal */
+:root{--ink:#171817;--paper:#f4f2ed;--line:#c6c4bb;--lime:#242522;color:var(--ink);background:#eae7e0}
+body{background:linear-gradient(120deg,#f8f7f3,#e8e4dc 68%,#f4f2ed)}
+header{min-height:70px}
+.brand b{border-radius:0;background:#20211e;color:#f7f5ef}
+nav a:hover,footer a:hover{color:#845013}
+.hero{grid-template-columns:minmax(220px,.75fr) minmax(0,1.6fr);gap:3vw;padding-block:clamp(32px,5vw,72px)}
+.kicker{color:#534f46;letter-spacing:.16em}
+h1{font-weight:650;font-size:clamp(2.8rem,4.8vw,4.6rem)}
+h1 span{color:#383935}
+.lead,.about p{color:#504e48}
+.button{background:#20211e;color:white;border-radius:0}
+.archive{position:relative;isolation:isolate;min-height:380px;aspect-ratio:1.62;overflow:hidden;background:#e8e5de;border-block:1px solid #aaa69d}
+.archive canvas{position:absolute;inset:0;z-index:-2;width:100%;height:100%}
+.archive:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#f5f2eb94,transparent 30%,transparent 60%,#f3f0e9d4)}
+.record{position:absolute;left:7%;bottom:17%;width:min(82%,400px);padding:14px 18px;background:#f7f5eeec;border-left:3px solid #21221f;box-shadow:4px 6px 22px #29281d12}
+.record small,.transport{font:.75rem var(--mono);letter-spacing:.06em;color:#504e45}
+.record h2{margin:6px 0 12px;font-size:clamp(1.1rem,2vw,1.65rem)}
+.record a{font-size:.875rem;border-bottom:1px solid;padding:4px 0}
+.transport{position:absolute;bottom:10px;right:4%;display:flex;align-items:center;gap:9px}
+.transport button{width:38px;height:34px;background:#f6f4ed;border:1px solid #aaa69d;font-size:1rem;color:#161713}
+.catalog{border-block:1px solid var(--line);background:#f4f2ed}
+.filters button,.card,.card-icon,.tags span{border-radius:0}
+.filters button[aria-pressed=true]{background:#232420;border-color:#232420}
+.grid{gap:1px;border:1px solid var(--line);background:var(--line)}
+.card{border:0;background:#faf9f5}
+.card:has(a):hover,.card:focus-within{background:white;box-shadow:inset 0 3px #9b672e}
+.card-meta,.card p,.card-bottom,footer,.tags span{color:#54534d}
+.card-icon,.card[data-type] .card-icon{background:#eceae2;color:#343530;border-left:2px solid #a38b63}
+footer a{color:#242520}
+@media(max-width:780px){.hero{grid-template-columns:1fr}.archive{min-height:0;aspect-ratio:1.95}.intro h1 span{display:inline}.hero h1{font-size:clamp(2.15rem,7.8vw,3.4rem)}}
+@media(max-width:480px){.archive{aspect-ratio:1.4}.record{bottom:22%;left:5%;padding:10px 12px}.hero{padding-block:28px}}

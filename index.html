@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#121916">
+  <meta name="theme-color" content="#eeeae3">
   <meta name="description" content="Maj-05 的游戏模组、机器人插件与独立工具作品集。">
   <title>我做的一些东西 · Maj-05</title>
   <link rel="stylesheet" href="style.css">
-  <script src="terrain.js" defer></script>
+
   <script src="projects.js" defer></script>
+  <script src="archive.js" defer></script>
 </head>
 <body id="top">
   <header class="wrap"><a class="brand" href="#top"><b aria-hidden="true">M</b> MAJ–05</a>
@@ -17,15 +18,20 @@
   <main>
     <section class="hero wrap">
       <div class="intro">
-        <p class="kicker">MAJ–05 / PORTFOLIO</p>
+        <p class="kicker">MAJ–05 / PROJECT ARCHIVE</p>
         <h1>我做的<span>一些东西</span></h1>
         <p class="lead">给游戏加点玩法，把资料装进聊天框。<br>这里收录了我的游戏模组、机器人插件和独立工具。</p>
         <a class="button" href="#projects">浏览作品</a>
       </div>
-      <a class="feature" href="https://github.com/Maj-05/Delta-Force-Classified-Top-Secret-Difficulty-Adapted-by-Duckov">
-        <div class="scene"><canvas id="terrain" width="800" height="440" aria-hidden="true"></canvas></div>
-        <div class="caption"><div><small>游戏模组 / Escape from Duckov</small><strong>Delta Force · 机密与绝密难度</strong></div><span>查看项目</span></div>
-      </a>
+      <div class="archive">
+        <canvas id="archive-scene" aria-hidden="true"></canvas>
+        <div class="record" aria-live="polite">
+          <small id="record-category">PROJECT ARCHIVE / 游戏模组</small>
+          <h2 id="record-name">Delta Force · 机密/绝密难度</h2>
+          <a id="record-link" href="#projects">查看项目</a>
+        </div>
+        <div class="transport"><button id="previous" aria-label="上一个项目">−</button><output id="position">01 / 13</output><button id="next" aria-label="下一个项目">＋</button></div>
+      </div>
     </section>
     <section class="catalog" id="projects"><div class="wrap">
       <div class="section-head"><h2>项目目录</h2><div class="filters" role="group" aria-label="项目分类">

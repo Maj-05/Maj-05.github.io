@@ -20,7 +20,7 @@ const labels = { mods: '游戏模组', plugins: '机器人插件', tools: '工�
 function render(filter) {
   const visible = projects.filter(project => filter === 'all' || project.type === filter)
   grid.innerHTML = visible.map(p => `
-    <article class="card" data-type="${p.type}">
+    <article id="project-${projects.indexOf(p)}" class="card" data-type="${p.type}">
       <div class="card-meta"><span class="card-icon" aria-hidden="true">${p.icon}</span><span>${labels[p.type]}</span></div>
       <h3>${p.url ? `<a href="${p.url}">${p.name}</a>` : p.name}</h3>
       <p>${p.desc}</p>
