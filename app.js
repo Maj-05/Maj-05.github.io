@@ -1,7 +1,8 @@
 /* MAJ–05 / PROJECT ANALYSIS OS — 交互层
-   档案阵列以平行投影绘制；切换时整排书页沿传送带连续下翻（cursor 不回跳）。 */
+   档案阵列：固定书架；切换时把选中的一本「抽出」（升起+高亮），其余不动。
+   20 份档案铺到多排：一排放 5 本，放满继续下一排。 */
 
-/* 用档案数量填充所有硬编码占位，避免以后加项目还要手改数字 */
+/* 用档案数量填充所有硬编码占位 */
 const totalFiles = String(projects.length).padStart(2, '0') + ' FILES'
 document.querySelectorAll('[data-total-files]').forEach(el => { el.textContent = totalFiles })
 document.querySelector('#status-count').textContent = totalFiles
@@ -37,23 +38,29 @@ buttons.forEach(b => b.addEventListener('click', () => { activeFilter = b.datase
 searchInput.addEventListener('input', () => { query = searchInput.value.trim().toLowerCase(); render() })
 render()
 
-/* ---------- Archive array canvas（连续翻页传送带 · 横向铺满） ---------- */
+/* ---------- Archive array canvas（抽出式 · 固定书架） ---------- */
 const scene = document.querySelector('#archive-scene')
 const pen = scene.getContext('2d')
 const reduced = matchMedia('(prefers-reduced-motion: reduce)')
 const stage = document.querySelector('#array-stage')
 const N = projects.length
-let cursor = 0        // 无界位置：上一份 -1、下一份 +1，永不回跳
-let pos = 0           // 平滑跟随 cursor 的浮点位置
+
+let selected = 0      // 当前选中的档案编号 0..N-1
+let prev = -1         // 上一本（正在放回）
+let lift = 1          // 当前抽出进度 0→1
+let prevLift = 0      // 上一本放回进度 1→0
 let frame = 0
 let wave = null
 let breathe = 0
 
-const FOCUS = 1       // 选中排停留在画面 row≈1（与原版构图一致）
-const COL_MIN = -14   // 保持原版的横向铺满范围
-const COL_MAX = 24
+const PER_ROW = 5     // 每排 5 本，放满继续下一排
+const ROW0 = 1        // 焦点区起始排（与原版构图一致）
+const COL0 = 4        // 焦点区起始列（与原版一致）
 
-function currentIndex() { return ((cursor % N) + N) % N }
+/** 第 i 本档案在书架上的格子 */
+function slot(i) {
+  return { row: ROW0 + Math.floor(i / PER_ROW), col: COL0 + (i % PER_ROW) }
+}
 
 function geometry() {
   const w = scene.clientWidth, h = scene.clientHeight
@@ -76,11 +83,11 @@ function face(points, fill) {
   pen.fill()
 }
 
-function waveHeight(j, col, now) {
+function waveHeight(row, col, now) {
   if (!wave) return 0
   const t = (now - wave.start) / 1000
   if (t > 1.6) { wave = null; return 0 }
-  const dist = Math.abs(j - wave.j) * 0.6 + Math.abs(col - 4) * 0.25
+  const dist = Math.abs(row - wave.row) * 0.6 + Math.abs(col - wave.col) * 0.25
   const phase = t - dist * 0.12
   if (phase < 0 || phase > 0.7) return 0
   return 30 * Math.sin((phase / 0.7) * Math.PI) * Math.exp(-t * 1.4)
@@ -95,32 +102,34 @@ function paint(now = performance.now()) {
   const sideB = dark ? '#31352f' : '#d8d2c7'
   const label = dark ? '#8f8a7f' : '#706f67'
   const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()
-  const settled = reduced.matches ? 1 : Math.max(0, 1 - Math.abs(cursor - pos))
 
-  // 覆盖 pos 与 cursor 之间的全部排，保证快速连点时高亮排也在画面内
-  const lo = Math.min(Math.floor(pos), cursor) - 5
-  const hi = Math.max(Math.floor(pos), cursor) + 5
+  const cur = slot(selected)
+  const old = prev >= 0 ? slot(prev) : null
 
-  // 远的排先画，近的排后画覆盖（与原版顺序一致）
-  for (let j = lo; j <= hi; j++) {
-    const row = FOCUS + (j - pos)
-    const idx = ((j % N) + N) % N
-    const labelText = 'FILE-' + String(idx + 1).padStart(2, '0')
-    for (let col = COL_MIN; col < COL_MAX; col++) {
-      const active = j === cursor && col === 4
-      const wh = waveHeight(j, col, now)
-      const breath = active ? breathe * 6 : 0
+  // 远的排先画、近的排后画覆盖（与原版顺序一致）
+  for (let row = -2; row < 5; row++) {
+    for (let col = -14; col < 24; col++) {
+      const isCur = row === cur.row && col === cur.col
+      const isOld = old && row === old.row && col === old.col
+      // 抽出：当前本升起，上一本放回；其余完全不动
+      const raise = isCur ? 36 * lift : isOld ? 36 * prevLift : 0
+      const chosen = isCur || isOld
+      const wh = waveHeight(row, col, now)
+      const breath = isCur ? breathe * 6 : 0
+      const idx = ((Math.round((row - ROW0) * 1) * PER_ROW + (col - COL0)) % N + N) % N
+      const labelText = isCur || isOld ? 'FILE-' + String((isCur ? selected : prev) + 1).padStart(2, '0') : 'MAJ / ARCHIVE'
+
       const x = col * 46 - row * 52
-      const y = row * 106 + col * 12 - 54 - (active ? 36 * settled : 0) - wh - breath
+      const y = row * 106 + col * 12 - 54 - raise - wh - breath
       const g = pen.createLinearGradient(x, y, x + 82, y + 85)
-      g.addColorStop(0, active ? accent : sideA)
-      g.addColorStop(.35, active ? top : sideB)
+      g.addColorStop(0, chosen ? accent : sideA)
+      g.addColorStop(.35, chosen ? top : sideB)
       g.addColorStop(.8, sideB)
       g.addColorStop(1, sideA)
       face([[x + 19, y + 3], [x + 153, y - 73], [x + 153, y + 6], [x + 19, y + 83]], g)
-      face([[x, y], [x + 19, y + 3], [x + 19, y + 83], [x, y + 80]], active ? accent : sideA)
-      face([[x, y], [x + 134, y - 77], [x + 153, y - 73], [x + 19, y + 3]], active ? (dark ? '#f0ece4' : '#fffdf4') : top)
-      face([[x + 6, y + 8], [x + 13, y + 9], [x + 13, y + 13], [x + 6, y + 12]], active ? accent : label)
+      face([[x, y], [x + 19, y + 3], [x + 19, y + 83], [x, y + 80]], chosen ? accent : sideA)
+      face([[x, y], [x + 134, y - 77], [x + 153, y - 73], [x + 19, y + 3]], chosen ? (dark ? '#f0ece4' : '#fffdf4') : top)
+      face([[x + 6, y + 8], [x + 13, y + 9], [x + 13, y + 13], [x + 6, y + 12]], chosen ? accent : label)
       pen.save()
       pen.transform(1, -.57, 0, 1, x + 31, y + 9)
       pen.fillStyle = label
@@ -132,46 +141,47 @@ function paint(now = performance.now()) {
 }
 
 function loop(now) {
-  const diff = cursor - pos
   let moving = false
-  if (Math.abs(diff) > 0.003) { pos += diff * 0.16; moving = true }
-  else pos = cursor
+  if (lift < 1) { lift = Math.min(1, lift + 0.07); moving = true }
+  if (prevLift > 0) { prevLift = Math.max(0, prevLift - 0.07); moving = true }
   if (!wave && breathe > 0) breathe = Math.max(0, breathe - 0.006)
-  paint(now) // waveHeight 会在结束时把 wave 置空
+  if (prevLift === 0 && prev >= 0) prev = -1
+  paint(now)
   if (moving || wave || breathe > 0) frame = requestAnimationFrame(loop)
 }
 
 function sync(emitWave = true) {
-  const idx = currentIndex()
-  const p = projects[idx]
+  const p = projects[selected]
   document.querySelector('#record-name').textContent = p.name
   document.querySelector('#record-category').textContent = 'PROJECT ARCHIVE / ' + labels[p.type]
-  document.querySelector('#position').textContent = String(idx + 1).padStart(2, '0') + ' / ' + N
-  document.querySelector('#readout-code').textContent = code(idx)
+  document.querySelector('#position').textContent = String(selected + 1).padStart(2, '0') + ' / ' + N
+  document.querySelector('#readout-code').textContent = code(selected)
   document.querySelector('#readout-type').textContent = labels[p.type]
-  document.querySelector('#readout-index').textContent = String(idx + 1).padStart(2, '0') + ' / ' + N
+  document.querySelector('#readout-index').textContent = String(selected + 1).padStart(2, '0') + ' / ' + N
   const open = document.querySelector('#record-open')
   open.textContent = p.url ? 'ACCESS FILE →' : 'READ CONCEPT →'
-  open.onclick = () => showDetail(idx)
-  if (emitWave && !reduced.matches) wave = { j: cursor, start: performance.now() }
+  open.onclick = () => showDetail(selected)
+  if (emitWave && !reduced.matches) {
+    const s = slot(selected)
+    wave = { row: s.row, col: s.col, start: performance.now() }
+  }
   breathe = 1
   cancelAnimationFrame(frame)
   frame = requestAnimationFrame(loop)
 }
 
-/** 直接跳到某个项目（优先走最短路径，避免从 19 跳 0 时倒着滑回去） */
-function goTo(index) {
+/** 换一本：上一本放回、新的一本抽出；其余书纹丝不动 */
+function pick(index) {
   const target = ((index % N) + N) % N
-  const k = Math.round((cursor - target) / N)
-  cursor = target + k * N
+  if (target === selected) return
+  prev = selected
+  prevLift = lift
+  selected = target
+  lift = 0
   sync()
 }
 
-/** 上一份 / 下一份：cursor 无界增减，一路往下翻 */
-function step(delta) {
-  cursor += delta
-  sync()
-}
+function step(delta) { pick(selected + delta) }
 
 document.querySelector('#previous').onclick = () => step(-1)
 document.querySelector('#next').onclick = () => step(1)
@@ -182,7 +192,7 @@ addEventListener('keydown', e => {
   if (/input|textarea/i.test(document.activeElement?.tagName || '')) return
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { step(1); e.preventDefault() }
   else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { step(-1); e.preventDefault() }
-  else if (e.key === 'Enter') { showDetail(currentIndex()); e.preventDefault() }
+  else if (e.key === 'Enter') { showDetail(selected); e.preventDefault() }
 })
 
 /* ---------- Detail dialog ---------- */
@@ -205,16 +215,13 @@ function showDetail(i) {
 function closeDetail() { detail.close(); document.querySelector('#array-mode').textContent = 'PREVIEW' }
 document.querySelector('#detail-close').onclick = closeDetail
 detail.addEventListener('click', e => { if (e.target === detail) closeDetail() })
-document.querySelector('#detail-prev').onclick = () => { closeDetail(); step(-1); showDetail(currentIndex()) }
-document.querySelector('#detail-next').onclick = () => { closeDetail(); step(1); showDetail(currentIndex()) }
+document.querySelector('#detail-prev').onclick = () => { closeDetail(); step(-1); showDetail(selected) }
+document.querySelector('#detail-next').onclick = () => { closeDetail(); step(1); showDetail(selected) }
 
 /* 点击目录卡片打开对应档案 */
 grid.addEventListener('click', e => {
   const card = e.target.closest('.card')
-  if (card) {
-    goTo(Number(card.dataset.index))
-    showDetail(currentIndex())
-  }
+  if (card) { pick(Number(card.dataset.index)); showDetail(selected) }
 })
 
 /* ---------- Theme ---------- */
@@ -236,4 +243,4 @@ function finishBoot() { if (booted) return; booted = true; boot.classList.add('d
 setTimeout(finishBoot, 2100)
 addEventListener('keydown', finishBoot, { once: true })
 boot.addEventListener('click', finishBoot, { once: true })
-if (reduced.matches) { boot.style.display = 'none'; pos = cursor; sync(false) }
+if (reduced.matches) { boot.style.display = 'none'; lift = 1; sync(false) }
