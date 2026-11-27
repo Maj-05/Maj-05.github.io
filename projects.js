@@ -13,5 +13,10 @@ const projects = [
   { name: 'Hunt 战绩查询', type: 'tools', label: 'STANDALONE TOOL', icon: '◎', desc: '独立运行的 Hunt: Showdown 1896 玩家战绩与排行榜查询工具，提供 CLI 和 HTTP API。', tech: 'Node.js · HTTP API', url: 'https://github.com/Maj-05/hunt-plugin' },
   { name: 'MOSS-Image 远程调用方案', type: 'tools', label: 'DEPLOYMENT GUIDE', icon: '⌘', desc: '记录本地 GPU 文生图服务、按需启动、闲置释放和安全 API 调用的部署思路。', tech: 'Python · FastAPI · CUDA', url: 'https://github.com/Maj-05/moss-image-remote-render' },
   { name: 'QQBot 插件集合', type: 'plugins', label: 'PLUGIN COLLECTION', icon: '⌁', desc: '收集视频解析、图片检索等 QQBot / 云崽插件示例与小工具。', tech: 'JavaScript · QQBot', url: 'https://github.com/Maj-05/QQBot-Plugins' },
-  { name: '更新雷达', type: 'tools', label: 'YUNZAI PLUGIN', icon: '⌾', desc: '群内订阅 GitHub Release / RSS 更新并自动推送，内容去重、首轮基线、指数退避，SQLite / JSON 双存储。', tech: 'Node.js · SQLite', url: 'https://github.com/Maj-05/update-radar-plugin' }
+  { name: '更新雷达', type: 'tools', label: 'YUNZAI PLUGIN', icon: '⌾', desc: '群内订阅 GitHub Release / RSS 更新并自动推送，内容去重、首轮基线、指数退避，SQLite / JSON 双存储。', tech: 'Node.js · SQLite', url: 'https://github.com/Maj-05/update-radar-plugin' },
+  { name: '野排 / 组排功能', type: 'mods', label: 'GAME MOD', icon: '⛨', desc: '《逃离鸭科夫》随机队友与预设组排：野排按 Boss 刷新率生成队友，组排从保存的两个预设中随机选择，支持队友统一指挥。', tech: 'C# · teammates.cs', url: 'https://github.com/Maj-05/duckov-squad-mode' },
+  { name: '贪吃的狗', type: 'mods', label: 'GAME MOD', icon: '✧', desc: '特殊队友模组：每 15 秒搜索 30 米物资、512 格背包、独立特殊文本，鼠标中键分享物资（25% 概率同意）。', tech: 'C# · teammates.cs', url: 'https://github.com/Maj-05/duckov-greedy-rat' },
+  { name: '狂暴 / 自定义难度解锁', type: 'mods', label: 'GAME MOD', icon: '⌁', desc: '让已有存档切换到自定义狂暴难度，无需重开。附作者后续重写的难度模组源码（游戏内 F8 菜单、数据驱动预设）。', tech: 'C# · Ruleset', url: 'https://github.com/Maj-05/duckov-frenzy-difficulty' },
+  { name: '三角洲击杀反馈', type: 'mods', label: 'GAME MOD · ARCHIVE', icon: '✷', desc: '为《逃离鸭科夫》加入三角洲行动击杀音效，音效作者亲自录制。当前归档工坊记录与预览图，源码待补。', tech: 'Audio · Steam Workshop', url: 'https://github.com/Maj-05/duckov-kill-feedback' },
+  { name: '人机文本 / 语音替换', type: 'mods', label: 'GAME MODS', icon: '❞', desc: '人机交战、换弹、躲避手雷等场景的自定义文本与语音，触发频率可调。收录多个相关模组的产物与配置。', tech: 'C# · Audio · Config', url: 'https://github.com/Maj-05/duckov-enemy-text-voice' }
 ];
