@@ -21,5 +21,6 @@ const projects = [
   { name: '三角洲击杀反馈', type: 'mods', label: 'GAME MOD · ARCHIVE', icon: '✷', desc: '为《逃离鸭科夫》加入三角洲行动击杀音效，音效作者亲自录制。当前归档工坊记录与预览图，源码待补。', tech: 'Audio · Steam Workshop', url: 'https://github.com/Maj-05/duckov-kill-feedback' },
   { name: '人机文本 / 语音替换', type: 'mods', label: 'GAME MODS', icon: '❞', desc: '人机交战、换弹、躲避手雷等场景的自定义文本与语音，触发频率可调。收录多个相关模组的产物与配置。', tech: 'C# · Audio · Config', url: 'https://github.com/Maj-05/duckov-enemy-text-voice' },
   { name: 'Steam 工坊归档工具', type: 'tools', label: 'STANDALONE TOOL', icon: '⇩', desc: '输入工坊 URL/ID，自动抓取标题、描述与预览图，生成 GitHub 仓库结构和 README，可连同源码一并推送。零依赖 Node CLI。', tech: 'Node.js · CLI · Zero-dep', url: 'https://github.com/Maj-05/steam-workshop-archiver' },
-  { name: 'Pocket Reader 离线阅读器', type: 'tools', label: 'PWA · OFFLINE', icon: '◫', desc: '本地优先的离线阅读 PWA：导入 EPUB/TXT、书架与进度、排版主题、书签、自定义书源规则引擎与 OPDS 支持。数据只存本机。', tech: 'JavaScript · PWA · IndexedDB', url: 'https://github.com/Maj-05/pocket-reader' }
+  { name: 'Pocket Reader 离线阅读器', type: 'tools', label: 'PWA · OFFLINE', icon: '◫', desc: '本地优先的离线阅读 PWA：导入 EPUB/TXT、书架与进度、排版主题、书签、自定义书源规则引擎与 OPDS 支持。数据只存本机。', tech: 'JavaScript · PWA · IndexedDB', url: 'https://github.com/Maj-05/pocket-reader' },
+  { name: 'Pocket Tools · C++ 工具集', type: 'tools', label: 'C++ · MCP', icon: '⚙', desc: '三个零依赖 C++20 程序作为 MCP stdio 服务接入 DSH：本地全文检索（中文 2-gram）、二进制分析、文本转换。全部本机运行。', tech: 'C++20 · JSON-RPC · MCP', url: 'https://github.com/Maj-05/dsh-cpp-tools' }
 ];
