@@ -1,0 +1,14 @@
+const projects=[
+ {name:'Delta Force · 机密/绝密难度',type:'mods',label:'GAME MOD',icon:'◈',desc:'为《逃离鸭科夫》加入普通、机密与绝密难度，并提供 AI、物资爆率和隐藏分等自定义选项。',tech:'C# · Escape from Duckov',url:'https://github.com/Maj-05/Delta-Force-Classified-Top-Secret-Difficulty-Adapted-by-Duckov'},
+ {name:'Escape from Duckov 模组集合',type:'mods',label:'GAME MODS',icon:'⬡',desc:'鸭科夫相关模组与实验项目。具体功能以各模组页面和创意工坊说明为准。',tech:'C# · Game Modding',url:'https://github.com/Maj-05/-Escape-from-Duckov-mod-'},
+ {name:'Bilibili 链接解析',type:'plugins',label:'YUNZAI PLUGIN',icon:'▶',desc:'自动识别 B 站视频、专栏、动态和 QQ 分享卡片，并将内容整理后发送到聊天。',tech:'JavaScript · Yunzai',url:'https://github.com/Maj-05/yunzai-plugin-bili'},
+ {name:'梗百科',type:'plugins',label:'YUNZAI PLUGIN',icon:'⌕',desc:'本地查询梗、缩写与网络黑话，内置 6696 条词条，支持命令查询和其他插件调用。',tech:'JavaScript · SQLite',url:'https://github.com/Maj-05/memewiki-plugin'},
+ {name:'贴吧 Dive',type:'plugins',label:'YUNZAI PLUGIN',icon:'↗',desc:'面向 TRSS-Yunzai / Miao-Yunzai 的贴吧读帖、日报与签到插件，支持可选自动化功能。',tech:'JavaScript · Yunzai',url:'https://github.com/Maj-05/yunzai-tieba-dive'},
+ {name:'Limbus Company 图鉴',type:'plugins',label:'YUNZAI PLUGIN',icon:'▦',desc:'离线查询人格、E.G.O、敌人与饰品，支持筛选、分页、随机抽卡与队伍参考。',tech:'JavaScript · Offline Data',url:'https://github.com/Maj-05/yunzai-limbus-plugin'},
+ {name:'重返未来：1999 图鉴',type:'plugins',label:'YUNZAI PLUGIN',icon:'✳',desc:'离线查询角色、心相与物品，支持中英文名、稀有度和属性筛选。',tech:'JavaScript · Yunzai',url:'https://github.com/Maj-05/r1999-plugin'},
+ {name:'ChatAI 扩展模块',type:'plugins',label:'AI EXTENSIONS',icon:'✦',desc:'包含表情包情绪分类、回复打断和主动发言等模块，为聊天机器人增加实用能力。',tech:'JavaScript · AI',url:'https://github.com/Maj-05/chatai-addons'},
+ {name:'Hunt 战绩查询',type:'tools',label:'STANDALONE TOOL',icon:'◎',desc:'独立运行的 Hunt: Showdown 1896 玩家战绩与排行榜查询工具，提供 CLI 和 HTTP API。',tech:'Node.js · HTTP API',url:'https://github.com/Maj-05/hunt-plugin'},
+ {name:'MOSS-Image 远程调用方案',type:'tools',label:'DEPLOYMENT GUIDE',icon:'⌘',desc:'记录本地 GPU 文生图服务、按需启动、闲置释放和安全 API 调用的部署思路。',tech:'Python · FastAPI · CUDA',url:'https://github.com/Maj-05/moss-image-remote-render'},
+ {name:'QQBot 插件集合',type:'plugins',label:'PLUGIN COLLECTION',icon:'⌁',desc:'收集视频解析、图片检索等 QQBot / 云崽插件示例与小工具。',tech:'JavaScript · QQBot',url:'https://github.com/Maj-05/QQBot-Plugins'}
+];
+const grid=document.querySelector('#project-grid');function render(filter='all'){grid.innerHTML=projects.filter(p=>filter==='all'||p.type===filter).map(p=>`<article class="card"><div class="card-top"><span class="card-type">${p.label}</span><span class="card-icon">${p.icon}</span></div><h3>${p.name}</h3><p>${p.desc}</p><div class="card-bottom"><span>${p.tech}</span><a href="${p.url}" target="_blank" rel="noopener">查看项目 ↗</a></div></article>`).join('')};render();document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{document.querySelector('.filters .active').classList.remove('active');b.classList.add('active');render(b.dataset.filter)}));
