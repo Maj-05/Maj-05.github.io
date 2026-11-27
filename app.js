@@ -1,6 +1,11 @@
 /* MAJ–05 / PROJECT ANALYSIS OS — 交互层
    档案阵列以平行投影绘制卡片，选中时沿列传播波浪；键盘与按钮均可切换。 */
 
+/* 用档案数量填充所有硬编码占位，避免以后加项目还要手改数字 */
+const totalFiles = String(projects.length).padStart(2, '0') + ' FILES'
+document.querySelectorAll('[data-total-files]').forEach(el => { el.textContent = totalFiles })
+document.querySelector('#status-count').textContent = totalFiles
+
 const grid = document.querySelector('#project-grid')
 const buttons = [...document.querySelectorAll('.filters button')]
 const labels = { mods: '游戏模组', plugins: '机器人插件', tools: '工具与方案' }
