@@ -1,5 +1,5 @@
 /* MAJ–05 / PROJECT ANALYSIS OS — 交互层
-   档案阵列以平行投影绘制卡片，选中时沿列传播波浪；键盘与按钮均可切换。 */
+   档案阵列以平行投影绘制；切换时整排书页沿传送带连续下翻（cursor 不回跳）。 */
 
 /* 用档案数量填充所有硬编码占位，避免以后加项目还要手改数字 */
 const totalFiles = String(projects.length).padStart(2, '0') + ' FILES'
@@ -37,15 +37,22 @@ buttons.forEach(b => b.addEventListener('click', () => { activeFilter = b.datase
 searchInput.addEventListener('input', () => { query = searchInput.value.trim().toLowerCase(); render() })
 render()
 
-/* ---------- Archive array canvas ---------- */
+/* ---------- Archive array canvas（连续翻页传送带） ---------- */
 const scene = document.querySelector('#archive-scene')
 const pen = scene.getContext('2d')
 const reduced = matchMedia('(prefers-reduced-motion: reduce)')
 const stage = document.querySelector('#array-stage')
-let selected = 0
+const N = projects.length
+let cursor = 0        // 无界位置：上一份 -1、下一份 +1，永不回跳
+let pos = 0           // 平滑跟随 cursor 的浮点位置
 let frame = 0
 let wave = null
 let breathe = 0
+
+const FOCUS = 2.5     // 选中排停留在画布纵向的中部
+const COLS = [-3, -2, -1, 0, 1, 2, 3]
+
+function currentIndex() { return ((cursor % N) + N) % N }
 
 function geometry() {
   const w = scene.clientWidth, h = scene.clientHeight
@@ -68,20 +75,18 @@ function face(points, fill) {
   pen.fill()
 }
 
-function waveHeight(row, col, now) {
+function waveHeight(j, c, now) {
   if (!wave) return 0
   const t = (now - wave.start) / 1000
   if (t > 1.6) { wave = null; return 0 }
-  const dist = Math.abs(row - wave.row) * 1 + Math.abs(col - wave.col) * .35
-  const phase = t - dist * .12
-  if (phase < 0 || phase > .7) return 0
-  const v = Math.sin((phase / .7) * Math.PI)
-  return 30 * v * Math.exp(-t * 1.4)
+  const dist = Math.abs(j - wave.j) * 0.6 + Math.abs(c) * 0.25
+  const phase = t - dist * 0.12
+  if (phase < 0 || phase > 0.7) return 0
+  return 30 * Math.sin((phase / 0.7) * Math.PI) * Math.exp(-t * 1.4)
 }
 
-function paint(now = performance.now(), lift = 1) {
-  if (!pen) return
-  if (!geometry()) return
+function paint(now = performance.now()) {
+  if (!pen || !geometry()) return
   pen.clearRect(0, 0, 820, 470)
   const dark = document.documentElement.dataset.theme === 'dark'
   const top = dark ? '#3a3d38' : '#e3ded4'
@@ -90,14 +95,19 @@ function paint(now = performance.now(), lift = 1) {
   const label = dark ? '#8f8a7f' : '#706f67'
   const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()
 
-  // rows painted back-to-front so nearer cards overlap correctly
-  for (let row = -2; row < 5; row++) {
-    for (let col = -14; col < 24; col++) {
-      const active = row === 1 && col === 4 + (selected % 5)
-      const wh = waveHeight(row, col, now)
+  const start = Math.floor(pos) - 6
+  const end = Math.floor(pos) + 6
+  const settled = reduced.matches ? 1 : Math.max(0, 1 - Math.abs(cursor - pos))
+
+  // 远的排先画（j 小 → row 小 → 屏幕靠上），近的后画
+  for (let j = start; j <= end; j++) {
+    const row = FOCUS + (j - pos)
+    for (const c of COLS) {
+      const active = Math.abs(row - FOCUS) < 0.5 && c === 0
+      const wh = waveHeight(j, c, now)
       const breath = active ? breathe * 6 : 0
-      const y = row * 106 + col * 12 - 54 - (active ? 36 * lift : 0) - wh - breath
-      const x = col * 46 - row * 52
+      const x = c * 46 - row * 52 + 300
+      const y = row * 106 + c * 12 - 54 - (active ? 36 * settled : 0) - wh - breath
       const g = pen.createLinearGradient(x, y, x + 82, y + 85)
       g.addColorStop(0, active ? accent : sideA)
       g.addColorStop(.35, active ? top : sideB)
@@ -117,64 +127,58 @@ function paint(now = performance.now(), lift = 1) {
   }
 }
 
-function activeBreathing() { return !reduced.matches && !wave && breathe > 0 }
-
 function loop(now) {
-  if (wave) {
-    paint(now)
-    if (wave) frame = requestAnimationFrame(loop)
-    return
-  }
-  breathe = Math.max(0, breathe - .006)
-  paint(now, 1)
-  if (activeBreathing()) frame = requestAnimationFrame(loop)
+  const diff = cursor - pos
+  let moving = false
+  if (Math.abs(diff) > 0.003) { pos += diff * 0.16; moving = true }
+  else pos = cursor
+  if (!wave && breathe > 0) breathe = Math.max(0, breathe - 0.006)
+  paint(now) // waveHeight 会在结束时把 wave 置空
+  if (moving || wave || breathe > 0) frame = requestAnimationFrame(loop)
 }
 
-function selectRecord(index, emitWave = true) {
-  selected = (index + projects.length) % projects.length
-  const p = projects[selected]
+function sync(emitWave = true) {
+  const idx = currentIndex()
+  const p = projects[idx]
   document.querySelector('#record-name').textContent = p.name
   document.querySelector('#record-category').textContent = 'PROJECT ARCHIVE / ' + labels[p.type]
-  document.querySelector('#position').textContent = String(selected + 1).padStart(2, '0') + ' / ' + projects.length
-  document.querySelector('#readout-code').textContent = code(selected)
+  document.querySelector('#position').textContent = String(idx + 1).padStart(2, '0') + ' / ' + N
+  document.querySelector('#readout-code').textContent = code(idx)
   document.querySelector('#readout-type').textContent = labels[p.type]
-  document.querySelector('#readout-index').textContent = String(selected + 1).padStart(2, '0') + ' / ' + projects.length
+  document.querySelector('#readout-index').textContent = String(idx + 1).padStart(2, '0') + ' / ' + N
   const open = document.querySelector('#record-open')
   open.textContent = p.url ? 'ACCESS FILE →' : 'READ CONCEPT →'
-  open.onclick = () => showDetail(selected)
-  if (emitWave && !reduced.matches) wave = { row: 1, col: 4 + (selected % 5), start: performance.now() }
+  open.onclick = () => showDetail(idx)
+  if (emitWave && !reduced.matches) wave = { j: cursor, start: performance.now() }
   breathe = 1
   cancelAnimationFrame(frame)
-  const start = performance.now()
-  function animate(now) {
-    const t = reduced.matches ? 1 : Math.min(1, (now - start) / 420)
-    paint(now, 1 - (1 - t) ** 3)
-    if (t < 1) frame = requestAnimationFrame(animate)
-    else if (wave) frame = requestAnimationFrame(loop)
-  }
-  frame = requestAnimationFrame(animate)
+  frame = requestAnimationFrame(loop)
 }
 
-document.querySelector('#previous').onclick = () => selectRecord(selected - 1)
-document.querySelector('#next').onclick = () => selectRecord(selected + 1)
+/** 直接跳到某个项目（优先走最短路径，避免从 19 跳 0 时倒着滑回去） */
+function goTo(index) {
+  const target = ((index % N) + N) % N
+  const k = Math.round((cursor - target) / N)
+  cursor = target + k * N
+  sync()
+}
+
+/** 上一份 / 下一份：cursor 无界增减，一路往下翻 */
+function step(delta) {
+  cursor += delta
+  sync()
+}
+
+document.querySelector('#previous').onclick = () => step(-1)
+document.querySelector('#next').onclick = () => step(1)
 new ResizeObserver(() => paint()).observe(stage)
 
-/* 列/行导航：左右跨 5 列，上下在列内前后移动 */
-function navigate(dx, dy) {
-  const cols = 5
-  const col = selected % cols
-  const row = Math.floor(selected / cols)
-  if (dx) selectRecord(((col + dx + cols) % cols) + row * cols)
-  else selectRecord((selected + dy * cols + projects.length) % projects.length)
-}
 addEventListener('keydown', e => {
   if (document.querySelector('#detail').open) return
   if (/input|textarea/i.test(document.activeElement?.tagName || '')) return
-  if (e.key === 'ArrowRight') { navigate(1, 0); e.preventDefault() }
-  else if (e.key === 'ArrowLeft') { navigate(-1, 0); e.preventDefault() }
-  else if (e.key === 'ArrowDown') { navigate(0, 1); e.preventDefault() }
-  else if (e.key === 'ArrowUp') { navigate(0, -1); e.preventDefault() }
-  else if (e.key === 'Enter') { showDetail(selected); e.preventDefault() }
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { step(1); e.preventDefault() }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { step(-1); e.preventDefault() }
+  else if (e.key === 'Enter') { showDetail(currentIndex()); e.preventDefault() }
 })
 
 /* ---------- Detail dialog ---------- */
@@ -197,13 +201,16 @@ function showDetail(i) {
 function closeDetail() { detail.close(); document.querySelector('#array-mode').textContent = 'PREVIEW' }
 document.querySelector('#detail-close').onclick = closeDetail
 detail.addEventListener('click', e => { if (e.target === detail) closeDetail() })
-document.querySelector('#detail-prev').onclick = () => { closeDetail(); selectRecord(selected - 1); showDetail(selected) }
-document.querySelector('#detail-next').onclick = () => { closeDetail(); selectRecord(selected + 1); showDetail(selected) }
+document.querySelector('#detail-prev').onclick = () => { closeDetail(); step(-1); showDetail(currentIndex()) }
+document.querySelector('#detail-next').onclick = () => { closeDetail(); step(1); showDetail(currentIndex()) }
 
 /* 点击目录卡片打开对应档案 */
 grid.addEventListener('click', e => {
   const card = e.target.closest('.card')
-  if (card) showDetail(Number(card.dataset.index))
+  if (card) {
+    goTo(Number(card.dataset.index))
+    showDetail(currentIndex())
+  }
 })
 
 /* ---------- Theme ---------- */
@@ -221,8 +228,8 @@ themeToggle.onclick = () => {
 /* ---------- Boot ---------- */
 const boot = document.querySelector('#boot')
 let booted = false
-function finishBoot() { if (booted) return; booted = true; boot.classList.add('done'); selectRecord(0) }
+function finishBoot() { if (booted) return; booted = true; boot.classList.add('done'); sync(false) }
 setTimeout(finishBoot, 2100)
 addEventListener('keydown', finishBoot, { once: true })
 boot.addEventListener('click', finishBoot, { once: true })
-if (reduced.matches) { boot.style.display = 'none'; selectRecord(0) }
+if (reduced.matches) { boot.style.display = 'none'; pos = cursor; sync(false) }
