@@ -1,46 +1,166 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#eeeae3">
-  <meta name="description" content="Maj-05 的游戏模组、机器人插件与独立工具作品集。">
-  <title>我做的一些东西 · Maj-05</title>
+  <meta name="theme-color" content="#e8e5e1">
+  <meta name="description" content="Maj-05 的项目分析终端 · 游戏模组、机器人插件与独立工具档案库。">
+  <title>MAJ–05 / PROJECT ANALYSIS OS</title>
   <link rel="stylesheet" href="style.css">
-
   <script src="projects.js" defer></script>
-  <script src="archive.js" defer></script>
+  <script src="app.js" defer></script>
 </head>
 <body id="top">
-  <header class="wrap"><a class="brand" href="#top"><b aria-hidden="true">M</b> MAJ–05</a>
-    <nav aria-label="主导航"><a href="#projects">作品</a><a href="#about">关于</a><a href="https://github.com/Maj-05">GitHub</a></nav>
+  <div class="boot" id="boot" aria-hidden="true">
+    <div class="boot-inner">
+      <p class="boot-line">> RHINE LAB / PROJECT ANALYSIS OS <span class="caret"></span></p>
+      <p class="boot-line">> 身份核验 …… <span class="ok">已通过</span></p>
+      <p class="boot-line">> 载入档案索引 …… <span class="ok">14 FILES</span></p>
+      <p class="boot-line boot-skip">按任意键或点击跳过</p>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="回到顶部">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 2 29 9v14L16 30 3 23V9z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M16 8 23 12v8l-7 4-7-4v-8z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="16" cy="16" r="2.4" fill="currentColor"/>
+      </svg>
+      <span class="brand-text">RHINE LAB <i>/</i> <b>MAJ–05</b></span>
+    </a>
+
+    <div class="system-status" aria-hidden="true">
+      <span class="status-light"></span>
+      <span>SYSTEM ONLINE</span>
+      <span class="status-sep">/</span>
+      <span id="status-count">14 FILES</span>
+    </div>
+
+    <nav aria-label="主导航">
+      <a href="#archive">档案阵列</a>
+      <a href="#catalog">项目目录</a>
+      <a href="#about">操作者</a>
+      <a class="nav-external" href="https://github.com/Maj-05" target="_blank" rel="noopener">GitHub ↗</a>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="切换明暗主题" title="切换明暗主题">◐</button>
+    </nav>
   </header>
+
   <main>
-    <section class="hero wrap">
-      <div class="intro">
-        <p class="kicker">MAJ–05 / PROJECT ARCHIVE</p>
-        <h1>我做的<span>一些东西</span></h1>
-        <p class="lead">给游戏加点玩法，把资料装进聊天框。<br>这里收录了我的游戏模组、机器人插件和独立工具。</p>
-        <a class="button" href="#projects">浏览作品</a>
-      </div>
-      <div class="archive">
-        <canvas id="archive-scene" aria-hidden="true"></canvas>
-        <div class="record" aria-live="polite">
-          <small id="record-category">PROJECT ARCHIVE / 游戏模组</small>
-          <h2 id="record-name">Delta Force · 机密/绝密难度</h2>
-          <a id="record-link" href="#projects">查看项目</a>
+    <section class="archive-hero" id="archive">
+      <div class="hero-copy">
+        <p class="kicker"><span class="kicker-mark"></span> MAJ–05 / PROJECT ANALYSIS OS</p>
+        <h1>项目<span>分析终端</span></h1>
+        <p class="lead">给游戏加点玩法，把资料装进聊天框。<br>这里收录了我的游戏模组、机器人插件与独立工具。</p>
+        <div class="hero-actions">
+          <a class="solid-button" href="#catalog">进入档案库 <span>→</span></a>
+          <a class="ghost-button" href="https://github.com/Maj-05" target="_blank" rel="noopener">GITHUB PROFILE ↗</a>
         </div>
-        <div class="transport"><button id="previous" aria-label="上一个项目">−</button><output id="position">01 / 13</output><button id="next" aria-label="下一个项目">＋</button></div>
+        <dl class="hero-readout">
+          <div><dt>档案编号</dt><dd id="readout-code">FILE–01</dd></div>
+          <div><dt>分类</dt><dd id="readout-type">游戏模组</dd></div>
+          <div><dt>索引</dt><dd id="readout-index">01 / 14</dd></div>
+        </dl>
+      </div>
+
+      <div class="array-frame">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <div class="array-head">
+          <span>ARCHIVE ARRAY / 档案阵列</span>
+          <span class="array-mode" id="array-mode">PREVIEW</span>
+        </div>
+        <div class="array-stage" id="array-stage">
+          <canvas id="archive-scene" aria-hidden="true"></canvas>
+          <div class="scanline" aria-hidden="true"></div>
+          <div class="record" aria-live="polite">
+            <small id="record-category">PROJECT ARCHIVE / 游戏模组</small>
+            <h2 id="record-name">Delta Force · 机密/绝密难度</h2>
+            <button id="record-open" class="record-open" type="button">ACCESS FILE →</button>
+          </div>
+          <div class="transport">
+            <button id="previous" type="button" aria-label="上一个档案">−</button>
+            <output id="position">01 / 14</output>
+            <button id="next" type="button" aria-label="下一个档案">＋</button>
+          </div>
+        </div>
+        <div class="array-foot"><span>↑↓ 切换档案</span><span>←→ 切换列</span><span>ENTER 读取</span></div>
       </div>
     </section>
-    <section class="catalog" id="projects"><div class="wrap">
-      <div class="section-head"><h2>项目目录</h2><div class="filters" role="group" aria-label="项目分类">
-        <button type="button" data-filter="all" aria-pressed="true">全部</button><button type="button" data-filter="mods" aria-pressed="false">游戏模组</button><button type="button" data-filter="plugins" aria-pressed="false">机器人插件</button><button type="button" data-filter="tools" aria-pressed="false">工具与方案</button>
-      </div></div>
-      <p class="sr" id="result-count" role="status"></p><div class="grid" id="project-grid"></div>
-    </div></section>
-    <section class="about wrap" id="about"><h2>兴趣驱动，<br>持续折腾。</h2><div><p>我喜欢围绕游戏和聊天机器人做实用的小工具，从玩法调整、资料查询，到群聊自动化与 AI 扩展。</p><div class="tags"><span>C#</span><span>JavaScript</span><span>Node.js</span><span>Yunzai</span><span>AstrBot</span></div></div></section>
+
+    <section class="catalog" id="catalog">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">02 / ARCHIVE INDEX</p>
+          <h2>项目目录</h2>
+        </div>
+        <p class="section-note">按分类筛选，或直接检索编号 / 标题 / 关键词。</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="filters" role="group" aria-label="项目分类">
+          <button type="button" data-filter="all" aria-pressed="true">全部 <span>ALL</span></button>
+          <button type="button" data-filter="mods" aria-pressed="false">游戏模组 <span>MODS</span></button>
+          <button type="button" data-filter="plugins" aria-pressed="false">机器人插件 <span>PLUGINS</span></button>
+          <button type="button" data-filter="tools" aria-pressed="false">工具与方案 <span>TOOLS</span></button>
+        </div>
+        <label class="search">
+          <span aria-hidden="true">⌕</span>
+          <input id="search" type="search" placeholder="检索档案…" autocomplete="off" aria-label="检索项目">
+        </label>
+      </div>
+
+      <p class="sr" id="result-count" role="status"></p>
+      <div class="grid" id="project-grid"></div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-head">
+        <p class="section-kicker">03 / OPERATOR PROFILE</p>
+        <h2>兴趣驱动，<br>持续折腾。</h2>
+      </div>
+      <div class="about-body">
+        <p>我喜欢围绕游戏和聊天机器人做实用的小工具，从玩法调整、资料查询，到群聊自动化与 AI 扩展。所有档案仅记录公开的功能与方法，私密项目不提供仓库文件。</p>
+        <div class="tags" aria-label="技术栈">
+          <span>C#</span><span>JavaScript</span><span>Node.js</span><span>Python</span><span>Yunzai</span><span>AstrBot</span>
+        </div>
+        <div class="about-links">
+          <a href="https://github.com/Maj-05" target="_blank" rel="noopener">GITHUB / MAJ-05 ↗</a>
+          <a href="#top">返回顶部 ↑</a>
+        </div>
+      </div>
+    </section>
   </main>
-  <footer class="wrap"><span>© 2026 Maj-05</span><a href="https://github.com/Maj-05">GitHub</a></footer>
+
+  <footer class="footer">
+    <span>© 2026 MAJ–05</span>
+    <span class="footer-center">PROJECT ANALYSIS OS · 界面参考 RHINE LAB ANALYSIS OS</span>
+    <a href="https://github.com/Maj-05" target="_blank" rel="noopener">GITHUB ↗</a>
+  </footer>
+
+  <dialog class="detail" id="detail" aria-labelledby="detail-title">
+    <div class="detail-inner">
+      <div class="detail-top">
+        <span id="detail-code">FILE–01</span>
+        <button id="detail-close" class="icon-btn" type="button" aria-label="关闭档案">✕</button>
+      </div>
+      <p class="detail-kicker" id="detail-kicker">PROJECT ARCHIVE / 游戏模组</p>
+      <h2 id="detail-title">Delta Force · 机密/绝密难度</h2>
+      <div class="detail-rule"></div>
+      <dl class="detail-meta">
+        <div><dt>分类</dt><dd id="detail-type">游戏模组</dd></div>
+        <div><dt>技术</dt><dd id="detail-tech">C# · Escape from Duckov</dd></div>
+        <div><dt>状态</dt><dd id="detail-status">已归档</dd></div>
+      </dl>
+      <p class="detail-desc" id="detail-desc"></p>
+      <div class="detail-actions">
+        <a id="detail-link" class="solid-button" href="#" target="_blank" rel="noopener">打开项目仓库 →</a>
+        <button id="detail-prev" class="ghost-button" type="button">← 上一份</button>
+        <button id="detail-next" class="ghost-button" type="button">下一份 →</button>
+      </div>
+    </div>
+  </dialog>
 </body>
 </html>
