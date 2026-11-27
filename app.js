@@ -53,7 +53,7 @@ let frame = 0
 let wave = null
 let breathe = 0
 
-const PER_ROW = 5     // 每排 5 本，放满继续下一排
+const PER_ROW = 10    // 每排 10 本，放满继续下一排
 const ROW0 = 1        // 焦点区起始排（与原版构图一致）
 const COL0 = 4        // 焦点区起始列（与原版一致）
 
@@ -87,7 +87,7 @@ function waveHeight(row, col, now) {
   if (!wave) return 0
   const t = (now - wave.start) / 1000
   if (t > 1.6) { wave = null; return 0 }
-  const dist = Math.abs(row - wave.row) * 0.6 + Math.abs(col - wave.col) * 0.25
+  const dist = Math.abs(row - wave.row) * 0.9 + Math.abs(col - wave.col) * 0.12
   const phase = t - dist * 0.12
   if (phase < 0 || phase > 0.7) return 0
   return 30 * Math.sin((phase / 0.7) * Math.PI) * Math.exp(-t * 1.4)
