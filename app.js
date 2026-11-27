@@ -37,7 +37,7 @@ buttons.forEach(b => b.addEventListener('click', () => { activeFilter = b.datase
 searchInput.addEventListener('input', () => { query = searchInput.value.trim().toLowerCase(); render() })
 render()
 
-/* ---------- Archive array canvas（连续翻页传送带） ---------- */
+/* ---------- Archive array canvas（连续翻页传送带 · 横向铺满） ---------- */
 const scene = document.querySelector('#archive-scene')
 const pen = scene.getContext('2d')
 const reduced = matchMedia('(prefers-reduced-motion: reduce)')
@@ -49,8 +49,9 @@ let frame = 0
 let wave = null
 let breathe = 0
 
-const FOCUS = 2.5     // 选中排停留在画布纵向的中部
-const COLS = [-3, -2, -1, 0, 1, 2, 3]
+const FOCUS = 1       // 选中排停留在画面 row≈1（与原版构图一致）
+const COL_MIN = -14   // 保持原版的横向铺满范围
+const COL_MAX = 24
 
 function currentIndex() { return ((cursor % N) + N) % N }
 
@@ -75,11 +76,11 @@ function face(points, fill) {
   pen.fill()
 }
 
-function waveHeight(j, c, now) {
+function waveHeight(j, col, now) {
   if (!wave) return 0
   const t = (now - wave.start) / 1000
   if (t > 1.6) { wave = null; return 0 }
-  const dist = Math.abs(j - wave.j) * 0.6 + Math.abs(c) * 0.25
+  const dist = Math.abs(j - wave.j) * 0.6 + Math.abs(col - 4) * 0.25
   const phase = t - dist * 0.12
   if (phase < 0 || phase > 0.7) return 0
   return 30 * Math.sin((phase / 0.7) * Math.PI) * Math.exp(-t * 1.4)
@@ -94,20 +95,23 @@ function paint(now = performance.now()) {
   const sideB = dark ? '#31352f' : '#d8d2c7'
   const label = dark ? '#8f8a7f' : '#706f67'
   const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()
-
-  const start = Math.floor(pos) - 6
-  const end = Math.floor(pos) + 6
   const settled = reduced.matches ? 1 : Math.max(0, 1 - Math.abs(cursor - pos))
 
-  // 远的排先画（j 小 → row 小 → 屏幕靠上），近的后画
-  for (let j = start; j <= end; j++) {
+  // 覆盖 pos 与 cursor 之间的全部排，保证快速连点时高亮排也在画面内
+  const lo = Math.min(Math.floor(pos), cursor) - 5
+  const hi = Math.max(Math.floor(pos), cursor) + 5
+
+  // 远的排先画，近的排后画覆盖（与原版顺序一致）
+  for (let j = lo; j <= hi; j++) {
     const row = FOCUS + (j - pos)
-    for (const c of COLS) {
-      const active = Math.abs(row - FOCUS) < 0.5 && c === 0
-      const wh = waveHeight(j, c, now)
+    const idx = ((j % N) + N) % N
+    const labelText = 'FILE-' + String(idx + 1).padStart(2, '0')
+    for (let col = COL_MIN; col < COL_MAX; col++) {
+      const active = j === cursor && col === 4
+      const wh = waveHeight(j, col, now)
       const breath = active ? breathe * 6 : 0
-      const x = c * 46 - row * 52 + 300
-      const y = row * 106 + c * 12 - 54 - (active ? 36 * settled : 0) - wh - breath
+      const x = col * 46 - row * 52
+      const y = row * 106 + col * 12 - 54 - (active ? 36 * settled : 0) - wh - breath
       const g = pen.createLinearGradient(x, y, x + 82, y + 85)
       g.addColorStop(0, active ? accent : sideA)
       g.addColorStop(.35, active ? top : sideB)
@@ -121,7 +125,7 @@ function paint(now = performance.now()) {
       pen.transform(1, -.57, 0, 1, x + 31, y + 9)
       pen.fillStyle = label
       pen.font = '6px monospace'
-      pen.fillText('MAJ / ARCHIVE', 0, 0)
+      pen.fillText(labelText, 0, 0)
       pen.restore()
     }
   }
