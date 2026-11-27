@@ -1,11 +1,12 @@
 /* 项目档案数据。仅声明全局数组，不含 DOM 逻辑（交互见 app.js）。 */
 const projects = [
   { name: 'Delta Force · 机密/绝密难度', type: 'mods', label: 'GAME MOD', icon: '◈', desc: '为《逃离鸭科夫》加入普通、机密与绝密难度，并提供 AI、物资爆率和隐藏分等自定义选项。', tech: 'C# · Escape from Duckov', url: 'https://github.com/Maj-05/Delta-Force-Classified-Top-Secret-Difficulty-Adapted-by-Duckov' },
-  { name: 'Escape from Duckov 模组集合', type: 'mods', label: 'GAME MODS', icon: '⬡', desc: '鸭科夫相关模组与实验项目。具体功能以各模组页面和创意工坊说明为准。', tech: 'C# · Game Modding', url: 'https://github.com/Maj-05/-Escape-from-Duckov-mod-' },
+  { name: 'Escape from Duckov 模组集合', type: 'mods', label: 'GAME MODS', icon: '⬡', desc: '鸭科夫相关模组与实验项目：敌情提示、侦测、语音替换、地图信息控制与任务区域排序等，以编译产物与配置归档。', tech: 'C# · Game Modding', url: 'https://github.com/Maj-05/duckov-enemy-text-voice' },
   { name: 'Bilibili 链接解析', type: 'plugins', label: 'YUNZAI PLUGIN', icon: '▶', desc: '自动识别 B 站视频、专栏、动态和 QQ 分享卡片，并将内容整理后发送到聊天。', tech: 'JavaScript · Yunzai', url: 'https://github.com/Maj-05/yunzai-plugin-bili' },
   { name: '梗百科', type: 'plugins', label: 'YUNZAI PLUGIN', icon: '⌕', desc: '本地查询梗、缩写与网络黑话，内置 6696 条词条，支持命令查询和其他插件调用。', tech: 'JavaScript · SQLite', url: 'https://github.com/Maj-05/memewiki-plugin' },
   { name: '贴吧 Dive', type: 'plugins', label: 'YUNZAI PLUGIN', icon: '↗', desc: '面向 TRSS-Yunzai / Miao-Yunzai 的贴吧读帖、日报与签到插件，支持可选自动化功能。', tech: 'JavaScript · Yunzai', url: 'https://github.com/Maj-05/yunzai-tieba-dive' },
   { name: 'Limbus Company 图鉴', type: 'plugins', label: 'YUNZAI PLUGIN', icon: '▦', desc: '离线查询人格、E.G.O、敌人与饰品，支持筛选、分页、随机抽卡与队伍参考。', tech: 'JavaScript · Offline Data', url: 'https://github.com/Maj-05/yunzai-limbus-plugin' },
+  { name: '边狱巴士图鉴 · AstrBot 版', type: 'plugins', label: 'ASTRBOT PLUGIN', icon: '◈', desc: '在 AstrBot 中用指令查询人格、E.G.O、敌人、饰品与状态效果，自带离线数据，无需模型或 API Key，支持名称搜索、ID 详情和分页。', tech: 'JavaScript · AstrBot', url: 'https://github.com/Maj-05/astrbot_plugin_limbus' },
   { name: '重返未来：1999 图鉴', type: 'plugins', label: 'YUNZAI PLUGIN', icon: '✳', desc: '在云崽与 AstrBot 中离线查询角色各阶技能、心相增幅与物品来源，支持稀有度和灵感组合筛选。', tech: 'Yunzai · AstrBot', url: 'https://github.com/Maj-05/r1999-plugin' },
   { name: 'ChatAI 扩展模块', type: 'plugins', label: 'AI EXTENSIONS', icon: '✦', desc: '将表情按情绪分类供 AI 按语境调用；支持中断生成，以及让机器人判断何时适合主动接话或问候。仅介绍功能思路，不公开仓库文件。', tech: 'JavaScript · AI · 方法概览' },
   { name: 'ChatAI 个性化增强', type: 'plugins', label: 'PRIVATE PROJECT · CONCEPT ONLY', icon: '◌', desc: '围绕多模型接入、工具与 MCP 调用、记忆和人格管理，以及 Web 管理面板做本地化扩展。这里仅展示功能方向。', tech: 'Yunzai · LLM · MCP' },
