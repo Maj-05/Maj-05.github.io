@@ -25,4 +25,5 @@ const projects = [
   { name: 'Pocket Tools · C++ 工具集', type: 'tools', label: 'C++ · MCP', icon: '⚙', desc: '三个零依赖 C++20 程序作为 MCP stdio 服务接入 DSH：本地全文检索（中文 2-gram）、二进制分析、文本转换。全部本机运行。', tech: 'C++20 · JSON-RPC · MCP', url: 'https://github.com/Maj-05/dsh-cpp-tools' },
   { name: 'Workflow Studio', type: 'tools', label: 'DSH PLUGIN', icon: '⚡', desc: 'DSH 可视化 Agent 工作流编排器：9 种节点（含条件/自定义 JS/Shell），拖节点连线构建 DAG 并编译成原生 workflow 脚本。本地自动保存、运行历史、中文界面与设置页，复用原生引擎不重造轮子。', tech: 'React · DSH Plugin · Compiler', url: 'https://github.com/Maj-05/dsh-workflow-studio' },
   { name: 'Luce Yunzai', type: 'plugins', label: 'BOT · RUNTIME', icon: '⬢', desc: '面向新一代 Node.js 的 QQ 机器人运行时：依赖注入、结构化路由、OneBot 适配器，内置 AI/记忆服务与可视化配置面板，兼容既有 Yunzai 插件生态。零依赖、全模块可测试。', tech: 'Node.js · ESM · Zero-dep', url: 'https://github.com/Maj-05/luce-yunzai' },
+  { name: 'RPG World 群聊游戏引擎', type: 'plugins', label: 'PRIVATE · RPG', icon: '⚔', desc: '基于 Luce Yunzai 的群聊文字 RPG：角色养成、回合制战斗、探索与经济系统。数值由确定性引擎计算，AI 只负责叙事。私有项目。', tech: 'Node.js · Luce Yunzai Plugin', url: 'https://github.com/Maj-05/rpg-world' },
 ];
