@@ -24,5 +24,5 @@ const projects = [
   { name: 'Pocket Reader 离线阅读器', type: 'tools', label: 'PWA · OFFLINE', icon: '◫', desc: '本地优先的离线阅读 PWA：导入 EPUB/TXT、书架与进度、排版主题、书签、自定义书源规则引擎与 OPDS 支持。数据只存本机。', tech: 'JavaScript · PWA · IndexedDB', url: 'https://github.com/Maj-05/pocket-reader' },
   { name: 'Pocket Tools · C++ 工具集', type: 'tools', label: 'C++ · MCP', icon: '⚙', desc: '三个零依赖 C++20 程序作为 MCP stdio 服务接入 DSH：本地全文检索（中文 2-gram）、二进制分析、文本转换。全部本机运行。', tech: 'C++20 · JSON-RPC · MCP', url: 'https://github.com/Maj-05/dsh-cpp-tools' },
   { name: 'Workflow Studio', type: 'tools', label: 'DSH PLUGIN', icon: '⚡', desc: 'DSH 可视化 Agent 工作流编排器：9 种节点（含条件/自定义 JS/Shell），拖节点连线构建 DAG 并编译成原生 workflow 脚本。本地自动保存、运行历史、中文界面与设置页，复用原生引擎不重造轮子。', tech: 'React · DSH Plugin · Compiler', url: 'https://github.com/Maj-05/dsh-workflow-studio' },
-  { name: 'Luce Yunzai 运行时', type: 'plugins', label: 'BOT · RUNTIME', icon: '⬢', desc: '面向新一代 Node.js 的 QQ 机器人运行时：依赖注入、结构化路由、OneBot 适配器，内置 AI/记忆服务与可视化配置面板，兼容既有 Yunzai 插件生态。零依赖、全模块可测试。', tech: 'Node.js · ESM · Zero-dep', url: 'https://github.com/Maj-05/luce-yunzai' },
+  { name: 'Luce Yunzai', type: 'plugins', label: 'BOT · RUNTIME', icon: '⬢', desc: '面向新一代 Node.js 的 QQ 机器人运行时：依赖注入、结构化路由、OneBot 适配器，内置 AI/记忆服务与可视化配置面板，兼容既有 Yunzai 插件生态。零依赖、全模块可测试。', tech: 'Node.js · ESM · Zero-dep', url: 'https://github.com/Maj-05/luce-yunzai' },
 ];
