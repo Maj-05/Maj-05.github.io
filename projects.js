@@ -27,4 +27,5 @@ const projects = [
   { name: 'Luce Yunzai', type: 'plugins', label: 'BOT · RUNTIME', icon: '⬢', desc: '面向新一代 Node.js 的 QQ 机器人运行时：依赖注入、结构化路由、OneBot 适配器，内置 AI/记忆服务与可视化配置面板，兼容既有 Yunzai 插件生态。零依赖、全模块可测试。', tech: 'Node.js · ESM · Zero-dep', url: 'https://github.com/Maj-05/luce-yunzai' },
   { name: 'RPG World 群聊游戏引擎', type: 'plugins', label: 'PRIVATE · RPG', icon: '⚔', desc: '基于 Luce Yunzai 的群聊文字 RPG：角色养成、回合制战斗、探索与经济系统。数值由确定性引擎计算，AI 只负责叙事。私有项目。', tech: 'Node.js · Luce Yunzai Plugin', url: 'https://github.com/Maj-05/rpg-world' },
   { name: 'Bilibili 音频提取', type: 'tools', label: 'STANDALONE TOOL', icon: '♫', desc: '从 B 站视频提取最高码率的纯音频流并保存为无损 M4A。用 yt-dlp 解析签名播放地址，轮换 CDN 节点、分段下载绕过 567 错误与代理断连，无需转码。支持 URL / BV 号 / av 号、代理与画质选择。', tech: 'Python · yt-dlp · CLI', url: 'https://github.com/Maj-05/bili-audio-dl' },
+  { name: 'DSH Insights', type: 'plugins', label: 'DSH PLUGIN', icon: '◷', desc: 'DeepSeek Harness 跨会话知识库与会话时间线：从会话事件流提取决策、待办与问题，提供检索工具和可视化查看器。遵循 log 为唯一真相源。', tech: 'JavaScript · DSH Plugin', url: 'https://github.com/Maj-05/dsh-insights' },
 ];
