@@ -26,4 +26,5 @@ const projects = [
   { name: 'Workflow Studio', type: 'tools', label: 'DSH PLUGIN', icon: '⚡', desc: 'DSH 可视化 Agent 工作流编排器：9 种节点（含条件/自定义 JS/Shell），拖节点连线构建 DAG 并编译成原生 workflow 脚本。本地自动保存、运行历史、中文界面与设置页，复用原生引擎不重造轮子。', tech: 'React · DSH Plugin · Compiler', url: 'https://github.com/Maj-05/dsh-workflow-studio' },
   { name: 'Luce Yunzai', type: 'plugins', label: 'BOT · RUNTIME', icon: '⬢', desc: '面向新一代 Node.js 的 QQ 机器人运行时：依赖注入、结构化路由、OneBot 适配器，内置 AI/记忆服务与可视化配置面板，兼容既有 Yunzai 插件生态。零依赖、全模块可测试。', tech: 'Node.js · ESM · Zero-dep', url: 'https://github.com/Maj-05/luce-yunzai' },
   { name: 'RPG World 群聊游戏引擎', type: 'plugins', label: 'PRIVATE · RPG', icon: '⚔', desc: '基于 Luce Yunzai 的群聊文字 RPG：角色养成、回合制战斗、探索与经济系统。数值由确定性引擎计算，AI 只负责叙事。私有项目。', tech: 'Node.js · Luce Yunzai Plugin', url: 'https://github.com/Maj-05/rpg-world' },
+  { name: 'Bilibili 音频提取', type: 'tools', label: 'STANDALONE TOOL', icon: '♫', desc: '从 B 站视频提取最高码率的纯音频流并保存为无损 M4A。用 yt-dlp 解析签名播放地址，轮换 CDN 节点、分段下载绕过 567 错误与代理断连，无需转码。支持 URL / BV 号 / av 号、代理与画质选择。', tech: 'Python · yt-dlp · CLI', url: 'https://github.com/Maj-05/bili-audio-dl' },
 ];
